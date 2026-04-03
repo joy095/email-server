@@ -5,7 +5,7 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "start": "node index.ts",
+    "start": "bun index.ts",
     "dev": "bun --watch index.ts"
   },
   "keywords": [],
@@ -16,6 +16,7 @@
     "nodemailer": "^8.0.4"
   },
   "devDependencies": {
-    "@types/nodemailer": "^7.0.11"
+    "@types/nodemailer": "^7.0.11",
+    "typescript": "^6.0.2"
   }
 }
