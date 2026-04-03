@@ -3,7 +3,7 @@ const secret = "SHA_SECRET";
 const body = JSON.stringify({
   to: "sourva55@gmail.com",
   subject: "Test Email",
-  text: "Hello from Hono + Bun 🚀",
+  text: "Hello from vercel Hono + Bun 🚀",
 });
 
 const encoder = new TextEncoder();
