@@ -4,8 +4,13 @@ import nodemailer from "nodemailer";
 import { logger } from "hono/logger";
 import { secureHeaders } from "hono/secure-headers";
 import { env } from "hono/adapter";
+import type { Context, Next } from "hono";
 
 const PORT = process.env.PORT || 5000;
+
+type Variables = {
+  parsedBody: EmailRequest;
+};
 
 // 1. Define the shape of your expected Request Body
 interface EmailRequest {
@@ -46,7 +51,10 @@ app.use(
 /**
  * HMAC Verification Middleware
  */
-const verifyHMAC = async (c: any, next: () => Promise<void>) => {
+const verifyHMAC = async (
+  c: Context<{ Bindings: Bindings; Variables: Variables }>,
+  next: Next,
+) => {
   const signature = c.req.header("x-signature");
   const { MAIL_HMAC_SECRET } = env(c);
 
@@ -74,7 +82,8 @@ const verifyHMAC = async (c: any, next: () => Promise<void>) => {
     );
 
     const sigBuffer = new Uint8Array(
-      signature.match(/.{1,2}/g)?.map((byte) => parseInt(byte, 16)) || [],
+      signature.match(/.{1,2}/g)?.map((byte: string) => parseInt(byte, 16)) ||
+        [],
     );
 
     const isValid = await crypto.subtle.verify(
@@ -105,7 +114,7 @@ app.get("/", (c) => c.text("Email Service Online"));
 // Email Route
 app.post("/send-email", verifyHMAC, async (c) => {
   // Retrieve the body from the context (set in middleware)
-  const body = c.get("parsedBody") as EmailRequest;
+  const body = c.get("parsedBody");
   const { to, subject, text, html, from } = body;
 
   const { SMTP_USER, SMTP_PASS } = env(c);
