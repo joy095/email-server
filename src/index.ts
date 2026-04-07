@@ -147,9 +147,7 @@ app.use(
 
 // ── Routes ───────────────────────────────────────────────────────────────────
 
-app.get("/health", (c) =>
-  c.json({ status: "ok", ts: new Date().toISOString() }),
-);
+app.get("/", (c) => c.json({ status: "ok", ts: new Date().toISOString() }));
 
 app.post("/send-email", async (c) => {
   const callerIp = getCallerIp(c.req.raw);
@@ -210,29 +208,5 @@ app.onError((err, c) => {
 });
 
 // ── Export / Start ────────────────────────────────────────────────────────────
-//
-// Vercel Node.js runtime expects a default export of the raw fetch handler
-// (Request → Response). Do NOT use `handle(app)` from @hono/node-server/vercel
-// — it wraps the response in a Bun-style _Response wrapper that Vercel rejects.
-//
-// For local dev, @hono/node-server's `serve` binds the same fetch handler to a
-// TCP port so nothing else needs to change.
 
-// Vercel / any fetch-based runtime picks this up via default export
-export default app.fetch;
-
-// Local dev — only runs outside Vercel (process.env.VERCEL is "1" on Vercel)
-if (!process.env.VERCEL) {
-  const { serve } = await import("@hono/node-server");
-  serve({ fetch: app.fetch, port: PORT }, () => {
-    console.log(`[startup] Email server → http://localhost:${PORT}`);
-    console.log(`[startup] SMTP: ${SMTP_HOST}:${SMTP_PORT}`);
-    console.log(
-      `[startup] Origin allowlist: ${
-        ALLOWED_CALLER_ORIGINS.length
-          ? ALLOWED_CALLER_ORIGINS.join(", ")
-          : "open (all origins)"
-      }`,
-    );
-  });
-}
+export default app;
