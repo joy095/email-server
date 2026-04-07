@@ -2,6 +2,7 @@
   "name": "hono",
   "type": "module",
   "dependencies": {
+    "@hono/node-server": "^1.19.13",
     "hono": "^4.12.11",
     "hono-rate-limiter": "^0.5.3",
     "nodemailer": "^8.0.4"
