@@ -2,9 +2,12 @@
   "name": "hono",
   "type": "module",
   "dependencies": {
+    "base64url": "^3.0.1",
     "hono": "^4.12.11",
     "hono-rate-limiter": "^0.5.3",
-    "nodemailer": "^8.0.4"
+    "jose": "^6.2.2",
+    "nodemailer": "^8.0.4",
+    "remove": "^0.1.5"
   },
   "scripts": {
     "dev": "bun --hot src/index.ts"

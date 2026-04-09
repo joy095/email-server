@@ -209,4 +209,7 @@ app.onError((err, c) => {
 
 // ── Export / Start ────────────────────────────────────────────────────────────
 
-export default app;
+export default {
+  port: 4000,
+  fetch: app.fetch,
+}
